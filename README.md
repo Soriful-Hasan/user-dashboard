@@ -29,7 +29,7 @@ It fetches user data from [JSONPlaceholder](https://jsonplaceholder.typicode.com
 
 ## 🧩 Tech Stack
 
-- [Next.js 14](https://nextjs.org/) (App Router, Client Components)
+- [Next.js 15.5](https://nextjs.org/) (App Router, Client Components)
 - [TypeScript](https://www.typescriptlang.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [shadcn/ui](https://ui.shadcn.com/)
