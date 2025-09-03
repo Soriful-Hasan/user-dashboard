@@ -5,6 +5,7 @@ import { User } from "@/lib/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 import { Loader } from "@/components/loader";
+import UserDetailsNotFound from "@/components/notFound";
 
 type UserDetailsProps = {
   id: string;
@@ -30,8 +31,9 @@ export default function UserDetails({ id }: UserDetailsProps) {
   }, [id]);
 
   if (loading) return <Loader />;
-  if (!userDetails)
-    return <h1 className="text-center mt-20">User not found</h1>;
+  if (!userDetails) {
+    return <UserDetailsNotFound />;
+  }
 
   const getInitials = (name: string) =>
     name

@@ -22,7 +22,13 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Users as UsersIcon, Mail, Phone, Building2 } from "lucide-react";
+import {
+  Users as UsersIcon,
+  Mail,
+  Phone,
+  Building2,
+  Search,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Loader } from "@/components/loader";
 
@@ -95,13 +101,19 @@ export default function UsersTable() {
 
             <div className="flex items-center gap-2">
               {/* Input */}
-              <Input
-                type="text"
-                placeholder="Search by name or email..."
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                className="max-w-xs"
-              />
+              <div className="relative w-full max-w-xs">
+                {/* Search icon */}
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+
+                {/* Input with padding-left so text doesn’t overlap */}
+                <Input
+                  type="text"
+                  placeholder="Search by name or email..."
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  className="pl-9"
+                />
+              </div>
               {/* Search Button */}
               <Button
                 className="cursor-pointer"
@@ -135,40 +147,53 @@ export default function UsersTable() {
               </TableHeader>
 
               <TableBody>
-                {paginatedUsers.map((user, index) => (
-                  <TableRow
-                    key={user.id}
-                    className="cursor-pointer hover:bg-muted/50 transition-colors"
-                    onClick={() => router.push(`/users/${user.id}`)}
-                  >
-                    <TableCell className="font-mono text-sm text-muted-foreground">
-                      {String(startIndex + index + 1).padStart(2, "0")}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-3">
-                        <Avatar className="h-9 w-9">
-                          <AvatarFallback>
-                            {getInitials(user.name)}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="space-y-1">
-                          <p className="font-medium leading-none">
-                            {user.name}
-                          </p>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell className=" md:table-cell">
-                      {user.email}
-                    </TableCell>
-                    <TableCell className=" sm:table-cell">
-                      {user.phone}
-                    </TableCell>
-                    <TableCell className=" lg:table-cell">
-                      {user.company.name}
+                {filteredUsers.length === 0 ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={5}
+                      className="text-center py-6 text-muted-foreground"
+                    >
+                      🔍 No users found for &quot;{search}&quot;
                     </TableCell>
                   </TableRow>
-                ))}
+                ) : (
+                  paginatedUsers.map((user, index) => (
+                    <TableRow
+                      key={user.id}
+                      className="cursor-pointer hover:bg-muted/50 transition-colors"
+                      onClick={() => router.push(`/users/${user.id}`)}
+                    >
+                      <TableCell className="font-mono text-sm text-muted-foreground">
+                        {String(startIndex + index + 1).padStart(2, "0")}
+                      </TableCell>
+
+                      <TableCell>
+                        <div className="flex items-center gap-3">
+                          <Avatar className="h-9 w-9">
+                            <AvatarFallback>
+                              {getInitials(user.name)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="space-y-1">
+                            <p className="font-medium leading-none">
+                              {user.name}
+                            </p>
+                          </div>
+                        </div>
+                      </TableCell>
+
+                      <TableCell className="md:table-cell">
+                        {user.email}
+                      </TableCell>
+                      <TableCell className="sm:table-cell">
+                        {user.phone}
+                      </TableCell>
+                      <TableCell className="lg:table-cell">
+                        {user.company.name}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
               </TableBody>
 
               {/* Pagination Footer */}
