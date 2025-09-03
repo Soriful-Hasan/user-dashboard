@@ -42,5 +42,5 @@ It fetches user data from [JSONPlaceholder](https://jsonplaceholder.typicode.com
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/dashboard-app.git
+   git clone https://github.com/Soriful-Hasan/user-dashboard
    cd dashboard-app
