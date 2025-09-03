@@ -1,9 +1,9 @@
 import React from "react";
 import UsersTable from "./userTable";
 
-export default function page() {
+export default function UserData() {
   return (
-    <div>
+    <div className="bg-gray-100">
       <UsersTable></UsersTable>
     </div>
   );

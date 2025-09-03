@@ -24,6 +24,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Users as UsersIcon, Mail, Phone, Building2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Loader } from "@/components/loader";
 
 export default function UsersTable() {
   const [inputValue, setInputValue] = useState("");
@@ -66,7 +67,7 @@ export default function UsersTable() {
     fetchUsers();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loader />;
 
   const getInitials = (name: string) =>
     name
@@ -77,65 +78,59 @@ export default function UsersTable() {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      {/* Header Section */}
-      <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <UsersIcon className="h-6 w-6 text-primary" />
-            <h1 className="text-3xl font-bold tracking-tight">Users</h1>
-          </div>
-          <p className="text-muted-foreground">
-            Manage and view all registered users
-          </p>
-        </div>
-
-        <div className="flex items-center gap-2">
-          {/* Input */}
-          <Input
-            type="text"
-            placeholder="Search by name or email..."
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            className="max-w-xs"
-          />
-          {/* Search Button */}
-          <Button
-            className="cursor-pointer"
-            onClick={() => {
-              setSearch(inputValue);
-              setCurrentPage(1);
-            }}
-          >
-            Search
-          </Button>
-
-          <Badge variant="secondary" className="text-sm">
-            {filteredUsers.length} users
-          </Badge>
-        </div>
-      </div>
-
       {/* Table Card */}
       <Card>
+        {/* Header Section */}
         <CardHeader>
-          <CardTitle>User Directory</CardTitle>
-          <CardDescription>
-            A comprehensive list of all users with their contact information and
-            company details
-          </CardDescription>
+          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 justify-between">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <UsersIcon className="h-6 w-6 text-primary" />
+                <h1 className="text-3xl font-bold tracking-tight">Users</h1>
+              </div>
+              <p className="text-muted-foreground">
+                Manage and view all registered users
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2">
+              {/* Input */}
+              <Input
+                type="text"
+                placeholder="Search by name or email..."
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                className="max-w-xs"
+              />
+              {/* Search Button */}
+              <Button
+                className="cursor-pointer"
+                onClick={() => {
+                  setSearch(inputValue);
+                  setCurrentPage(1);
+                }}
+              >
+                Search
+              </Button>
+
+              {!loading && (
+                <Badge variant="secondary" className="text-sm">
+                  {filteredUsers.length} users
+                </Badge>
+              )}
+            </div>
+          </div>
         </CardHeader>
         <CardContent className="p-0">
-          <div className="rounded-md border">
+          <div className="rounded-md border overflow-x-auto w-full">
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-12">#</TableHead>
-                  <TableHead>User</TableHead>
-                  <TableHead className="hidden md:table-cell">Email</TableHead>
-                  <TableHead className="hidden sm:table-cell">Phone</TableHead>
-                  <TableHead className="hidden lg:table-cell">
-                    Company
-                  </TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead className=" md:table-cell">Email</TableHead>
+                  <TableHead className=" sm:table-cell">Phone</TableHead>
+                  <TableHead className=" lg:table-cell">Company</TableHead>
                 </TableRow>
               </TableHeader>
 
@@ -143,7 +138,7 @@ export default function UsersTable() {
                 {paginatedUsers.map((user, index) => (
                   <TableRow
                     key={user.id}
-                    className="hover:bg-muted/50 transition-colors"
+                    className="cursor-pointer hover:bg-muted/50 transition-colors"
                     onClick={() => router.push(`/users/${user.id}`)}
                   >
                     <TableCell className="font-mono text-sm text-muted-foreground">
@@ -163,13 +158,13 @@ export default function UsersTable() {
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell className="hidden md:table-cell">
+                    <TableCell className=" md:table-cell">
                       {user.email}
                     </TableCell>
-                    <TableCell className="hidden sm:table-cell">
+                    <TableCell className=" sm:table-cell">
                       {user.phone}
                     </TableCell>
-                    <TableCell className="hidden lg:table-cell">
+                    <TableCell className=" lg:table-cell">
                       {user.company.name}
                     </TableCell>
                   </TableRow>
@@ -186,6 +181,7 @@ export default function UsersTable() {
                       </span>
                       <div className="flex gap-2">
                         <Button
+                          className="cursor-pointer"
                           variant="outline"
                           size="sm"
                           onClick={() =>
@@ -197,6 +193,7 @@ export default function UsersTable() {
                         </Button>
                         <Button
                           variant="outline"
+                          className="cursor-pointer"
                           size="sm"
                           onClick={() =>
                             setCurrentPage((p) => Math.min(p + 1, totalPages))

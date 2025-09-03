@@ -1,29 +1,14 @@
-"use client";
-import { getUserById } from "@/lib/api";
-import { User } from "@/lib/types";
-import React, { useEffect, useState } from "react";
+import UserDetails from "./userDetails";
 
-type userDetailsProps = {
-  id: number;
+type PageProps = {
+  params: Promise<{ id: string }>;
 };
-export default function UsersDetails({ id }: userDetailsProps) {
-  const [userDetails, setUserDetails] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    async function fetchUsers() {
-      try {
-        const data: User[] = await getUserById(id);
-        setUserDetails(data);
-      } catch (error) {
-        console.error("Failed to load users", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchUsers();
-  }, []);
-  if (loading) {
-    return <h1>Loading......</h1>;
-  }
-  return <div>User Details Page</div>;
+
+export default async function UserPage({ params }: PageProps) {
+  const { id } = await params; // unwrap params
+  return (
+    <div className="bg-gray-100 min-h-screen">
+      <UserDetails id={id} />
+    </div>
+  );
 }
